@@ -9,7 +9,7 @@ const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
     <div className={cn("", className)} {...props}>
       <div className={`flex h-[3.5rem] items-center px-[${side_spacing}]`}>
         <NavbarBrand to="/" className="h-10 w-10" />
-        <NavbarUserPanel src="" className="ml-auto" spacing={side_spacing} />
+        <NavbarUserPanel src="" className="ml-auto flex space-x-2" spacing={side_spacing} />
       </div>
       <div className={`h-[3rem] px-[${side_spacing}]`}>
         <NavbarMenu className="h-full space-x-2" />
