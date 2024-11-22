@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+
 import MainLayout from "./layouts/MainLayout";
 import About from "./pages/main/About";
 import Home from "./pages/main/Home";
@@ -6,11 +7,12 @@ import Profile from "./pages/main/Profile";
 import Settings from "./pages/main/Settings";
 import Dashboard from "./pages/main/Dashboard";
 
+import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
 
 import Messages from "./pages/chat_app/Chat";
 
-import { ThemeProvider } from "@/components/ui-shadcn/theme-provider"
+import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
 import "./App.css";
 
@@ -18,7 +20,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Routes>
-        <Route path="" element={<MainLayout/>} >
+        <Route path="" element={<MainLayout />}>
           <Route path="" element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="dashboard" element={<Dashboard />} />
@@ -26,8 +28,8 @@ function App() {
           <Route path="settings" element={<Settings />} />
         </Route>
 
-        <Route path="auth">
-          <Route path="login" element={<Login />}></Route>
+        <Route path="auth" element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
         </Route>
 
         <Route path="chat">

@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 
-const MainLayout = () => {
+const AuthLayout = () => {
   return (
-    <>
+    <div className="h-screen flex">
       <Outlet />
-    </>
+    </div>
   );
 };
 
-export default MainLayout;
+export default AuthLayout;

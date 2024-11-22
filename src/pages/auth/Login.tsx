@@ -12,23 +12,18 @@ import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="m-auto min-w-[400px]">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your username below to login to your account
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="user@email.com"
-              required
-            />
+            <Label htmlFor="username">Username</Label>
+            <Input id="username" type="username" required />
           </div>
           <div className="grid gap-2">
             <div className="flex items-center">
@@ -37,7 +32,7 @@ const Login = () => {
                 Forgot your password?
               </Link>
             </div>
-            <Input id="password" type="password" placeholder="******" required />
+            <Input id="password" type="password" required />
           </div>
           <Button type="submit" className="w-full">
             Login
