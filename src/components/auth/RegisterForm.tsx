@@ -16,17 +16,21 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const formSchema = z.object({
+    email: z.string().min(6).max(50),
     username: z.string().min(6).max(50),
     password: z.string().min(8).max(100),
+    password_confirmation: z.string().min(8).max(100),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      email: "",
       username: "",
       password: "",
+      password_confirmation: "",
     },
   });
 
@@ -37,6 +41,19 @@ const LoginForm = () => {
   return (
     <Form {...form}>
       <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormControl>
+                <Input type="email" {...field} required />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="username"
@@ -55,12 +72,22 @@ const LoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <div className="flex items-center">
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <Link to="#" className="ml-auto text-sm underline">
-                  Forgot your password?
-                </Link>
-              </div>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} required />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password_confirmation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="password_confirmation">
+                Confirm password
+              </FormLabel>
               <FormControl>
                 <Input type="password" {...field} required />
               </FormControl>
@@ -69,20 +96,20 @@ const LoginForm = () => {
           )}
         />
         <Button type="submit" className="w-full">
-          Login
+          Register
         </Button>
         <Button variant="outline" className="w-full">
           Login with Google
         </Button>
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link to="/auth/register" className="underline">
-            Register
-          </Link>
-        </div>
       </form>
+      <div className="mt-4 text-center text-sm">
+        Already had an account?{" "}
+        <Link to="/auth/login" className="underline">
+          Login
+        </Link>
+      </div>
     </Form>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
