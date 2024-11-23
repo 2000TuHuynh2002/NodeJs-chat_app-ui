@@ -10,13 +10,13 @@ import { Input } from "@/components/ui-shadcn/input";
 import { Label } from "@/components/ui-shadcn/label";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
   return (
-    <Card className="m-auto min-w-[400px]">
+    <Card className="m-auto min-w-[480px]">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">Register</CardTitle>
         <CardDescription>
-          Enter your username below to login to your account
+          Enter your information below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -26,25 +26,28 @@ const Login = () => {
             <Input id="username" type="text" required />
           </div>
           <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link to="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
-            </div>
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" required />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" required />
           </div>
+          <div className="grid gap-2">
+            <Label htmlFor="password_confirmation">Confirm password</Label>
+            <Input id="password_confirmation" type="password" required />
+          </div>
           <Button type="submit" className="w-full">
-            Login
+            Register
           </Button>
           <Button variant="outline" className="w-full">
             Login with Google
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link to="/auth/register" className="underline">
-            Register
+          Already had an account?{" "}
+          <Link to="/auth/login" className="underline">
+            Login
           </Link>
         </div>
       </CardContent>
@@ -52,4 +55,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
