@@ -1,5 +1,9 @@
-import { useState } from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import Cookies from "js-cookie";
+
+import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
+
+import { isCookieExist } from "./utils/cookie.utils";
 
 import MainLayout from "./layouts/MainLayout";
 import About from "./pages/main/About";
@@ -16,24 +20,22 @@ import Messages from "./pages/chat_app/Chat";
 
 import NotFound from "./pages/error/404";
 
-import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
-
 import "./App.css";
 
-const ProtectedRoute = (props: any) => {
-  // let auth={'token': false}
-  return props.isAuthenticated ? <Outlet /> : <Navigate to="/auth/login" />;
+const ProtectedRoute = () => {
+  return isCookieExist("token") ? <Outlet /> : <Navigate to="/auth/login" />;
 };
 
+const AuthRoute = () => {
+  return isCookieExist("token") ? <Navigate to="/" /> : <Outlet />;
+};
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Routes>
         {/* Main-application pages */}
-        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="" element={<MainLayout />}>
             <Route path="" element={<Home />} />
             <Route path="about" element={<About />} />
@@ -48,9 +50,11 @@ const App = () => {
         </Route>
 
         {/* Authentication pages */}
-        <Route path="auth" element={<AuthLayout />}>
-          <Route path="login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="register" element={<Register />} />
+        <Route element={<AuthRoute />}>
+          <Route path="auth" element={<AuthLayout />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
         </Route>
 
         {/* Error pages */}
@@ -58,6 +62,6 @@ const App = () => {
       </Routes>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

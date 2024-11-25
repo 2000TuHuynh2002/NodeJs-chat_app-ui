@@ -1,6 +1,7 @@
 "use client";
 
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import { Button } from "@/components/ui-shadcn/button";
 import {
@@ -18,10 +19,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const LoginForm = (props: any) => {
+const LoginForm = () => {
   const formSchema = z.object({
-    username: z.string().min(6).max(50),
-    password: z.string().min(8).max(100),
+    username: z.string().min(4).max(50),
+    password: z.string().min(6).max(100),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,16 +35,18 @@ const LoginForm = (props: any) => {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    const data = form.getValues();
     console.log(data);
     console.log(process.env.REACT_APP_API_URL);
-    props.setIsAuthenticated(true);
-    navigate("/dashboard");
-  };
+    Cookies.set("token", "authenticated");
+    navigate(`/`);
+  }
 
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="grid gap-4" onSubmit={onSubmit}>
         <FormField
           control={form.control}
           name="username"

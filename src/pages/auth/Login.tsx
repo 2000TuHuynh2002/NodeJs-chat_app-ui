@@ -8,7 +8,7 @@ import {
 
 import LoginForm from "@/components/auth/LoginForm";
 
-const Login = (props: any) => {
+const Login = () => {
   return (
     <Card className="m-auto min-w-[400px]">
       <CardHeader>
@@ -18,7 +18,7 @@ const Login = (props: any) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <LoginForm setIsAuthenticated={props.setIsAuthenticated} />
+        <LoginForm />
       </CardContent>
     </Card>
   );
