@@ -32,6 +32,7 @@ const LoginForm = () => {
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
+    console.log(process.env.REACT_APP_API_URL);
   };
 
   return (

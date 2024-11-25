@@ -26,7 +26,7 @@ const ProtectedRoute = (props: any) => {
 
 const isAuthenticated = false;
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Routes>
