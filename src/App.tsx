@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
@@ -24,9 +25,10 @@ const ProtectedRoute = (props: any) => {
   return props.isAuthenticated ? <Outlet /> : <Navigate to="/auth/login" />;
 };
 
-const isAuthenticated = false;
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Routes>
@@ -47,11 +49,11 @@ const App = () => {
 
         {/* Authentication pages */}
         <Route path="auth" element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
+          <Route path="login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="register" element={<Register />} />
         </Route>
 
-        {/* 404 page */}
+        {/* Error pages */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </ThemeProvider>

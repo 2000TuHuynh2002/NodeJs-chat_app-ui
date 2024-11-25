@@ -1,5 +1,7 @@
 "use client";
 
+import { useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui-shadcn/button";
 import {
   Form,
@@ -16,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const LoginForm = () => {
+const LoginForm = (props: any) => {
   const formSchema = z.object({
     username: z.string().min(6).max(50),
     password: z.string().min(8).max(100),
@@ -30,9 +32,13 @@ const LoginForm = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
     console.log(process.env.REACT_APP_API_URL);
+    props.setIsAuthenticated(true);
+    navigate("/dashboard");
   };
 
   return (
