@@ -1,5 +1,7 @@
 "use client";
 
+import { useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui-shadcn/button";
 import {
   Form,
@@ -34,13 +36,20 @@ const RegisterForm = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
+    navigate("/auth/login");
   };
 
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        method="POST"
+        className="grid gap-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="email"

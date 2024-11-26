@@ -35,17 +35,19 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = async (event: any) => {
-    event.preventDefault();
-    const data = form.getValues();
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
     Cookies.set("token", "authenticated");
-    navigate(`/`);
-  }
+    navigate("/");
+  };
 
   return (
     <Form {...form}>
-      <form method="POST" className="grid gap-4" onSubmit={onSubmit}>
+      <form
+        method="POST"
+        className="grid gap-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="username"
