@@ -1,5 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { deleteCookie } from "@/utils/cookie.utils";
+
 import {
   Avatar,
   AvatarFallback,
@@ -30,7 +33,13 @@ const NavbarBrand = ({
   const menuItems = {
     profile: { label: "Profile", path: "/profile" },
     settings: { label: "Setting", path: "/settings", shortcut: "⇧P" },
-    logout: { label: "Logout", path: "#" },
+  };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    deleteCookie("token");
+    navigate("/auth/login");
   };
 
   return (
@@ -59,6 +68,7 @@ const NavbarBrand = ({
                 </DropdownMenuItem>
               </Link>
             ))}
+            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

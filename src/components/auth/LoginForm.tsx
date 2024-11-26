@@ -39,14 +39,13 @@ const LoginForm = () => {
     event.preventDefault();
     const data = form.getValues();
     console.log(data);
-    console.log(process.env.REACT_APP_API_URL);
     Cookies.set("token", "authenticated");
     navigate(`/`);
   }
 
   return (
     <Form {...form}>
-      <form className="grid gap-4" onSubmit={onSubmit}>
+      <form method="POST" className="grid gap-4" onSubmit={onSubmit}>
         <FormField
           control={form.control}
           name="username"
