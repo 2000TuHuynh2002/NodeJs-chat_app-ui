@@ -22,11 +22,11 @@ import NotFound from "./pages/error/404";
 import "./App.css";
 
 const ProtectedRoute = () => {
-  return isCookieExist("token") ? <Outlet /> : <Navigate to="/auth/login" />;
+  return isCookieExist("isLoggedIn") ? <Outlet /> : <Navigate to="/auth/login" />;
 };
 
 const AuthRoute = () => {
-  return isCookieExist("token") ? <Navigate to="/" /> : <Outlet />;
+  return isCookieExist("isLoggedIn") ? <Navigate to="/" /> : <Outlet />;
 };
 
 const App = () => {

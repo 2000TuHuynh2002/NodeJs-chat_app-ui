@@ -1,7 +1,6 @@
 "use client";
 
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 import { apiLogin } from "@/utils/axios.utils";
 
@@ -40,7 +39,7 @@ const LoginForm = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const [status, response] = await apiLogin(data);
     if (status === 200) {
-      Cookies.set("token", response.accessToken);
+      sessionStorage.setItem("access_token", response.accessToken);
       navigate("/");
     } else {
       form.setError("username", {
