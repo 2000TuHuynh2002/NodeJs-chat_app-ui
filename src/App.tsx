@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import Cookies from "js-cookie";
 
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 

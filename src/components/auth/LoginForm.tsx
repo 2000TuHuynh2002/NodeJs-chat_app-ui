@@ -3,6 +3,8 @@
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
+import { apiLogin } from "@/utils/axios.utils";
+
 import { Button } from "@/components/ui-shadcn/button";
 import {
   Form,
@@ -36,9 +38,16 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    Cookies.set("token", "authenticated");
-    navigate("/");
+    const [status, response] = await apiLogin(data);
+    if (status === 200) {
+      Cookies.set("token", response.accessToken);
+      navigate("/");
+    } else {
+      form.setError("username", {
+        type: "manual",
+        message: response.error,
+      });
+    }
   };
 
   return (
