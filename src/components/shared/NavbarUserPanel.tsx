@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { deleteCookie } from "@/utils/cookie.utils";
+import { apiLogout } from "@/utils/axios.utils";
 
 import {
   Avatar,
@@ -37,9 +38,14 @@ const NavbarBrand = ({
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    deleteCookie("token");
-    navigate("/auth/login");
+  const handleLogout = async () => {
+    const [status, response] = await apiLogout();
+    if (status === 200) {
+      deleteCookie("token");
+      navigate("/auth/login");
+    } else {
+      console.error(response.error);
+    }
   };
 
   return (

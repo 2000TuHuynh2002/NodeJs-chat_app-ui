@@ -20,4 +20,21 @@ const apiLogin = async (data: any) => {
     });
 };
 
-export { apiLogin };
+const apiLogout = async () => {
+  return axios({
+    method: "POST",
+    url: `http://${API_URL}/api/auth/logout`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  })
+    .then((response) => {
+      return [response.status, response.data];
+    })
+    .catch((error) => {
+      return [error.response.status, error.response.data];
+    });
+};
+
+export { apiLogin, apiLogout };
