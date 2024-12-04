@@ -1,6 +1,6 @@
 "use client";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui-shadcn/button";
 import {
@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui-shadcn/form";
 import { Input } from "@/components/ui-shadcn/input";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";

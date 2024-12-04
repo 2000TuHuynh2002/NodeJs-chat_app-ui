@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { cn } from "@/lib/shadcn";
 
 interface NavbarBrandProps extends React.HTMLAttributes<HTMLElement> {

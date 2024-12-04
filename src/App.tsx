@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router";
 
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
@@ -46,7 +46,7 @@ const App = () => {
           <Route path="chat">
             <Route path="messages" element={<Messages />} />
           </Route>
-        </Route>
+          </Route>
 
         {/* Authentication pages */}
         <Route element={<AuthRoute />}>
@@ -54,7 +54,7 @@ const App = () => {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
           </Route>
-        </Route>
+          </Route>
 
         {/* Error pages */}
         <Route path="*" element={<NotFound />} />

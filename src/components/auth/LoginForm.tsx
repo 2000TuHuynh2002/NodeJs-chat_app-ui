@@ -1,6 +1,6 @@
 "use client";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { apiLogin } from "@/utils/axios.utils";
 
@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui-shadcn/form";
 import { Input } from "@/components/ui-shadcn/input";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -39,7 +39,9 @@ const LoginForm = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const [status, response] = await apiLogin(data);
     if (status === 200) {
-      sessionStorage.setItem("access_token", response.accessToken);
+      const { accessToken, user } = response;
+      sessionStorage.setItem("access_token", accessToken);
+      sessionStorage.setItem("user", JSON.stringify(user));
       navigate("/");
     } else {
       form.setError("username", {
