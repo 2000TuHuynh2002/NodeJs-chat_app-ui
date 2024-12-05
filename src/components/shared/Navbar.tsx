@@ -2,7 +2,7 @@ import React from "react";
 import NavbarBrand from "@/components/shared/NavbarBrand";
 import NavbarMenu from "@/components/shared/NavbarMenu";
 import NavbarUserPanel from "@/components/shared/NavbarUserPanel";
-import { cn } from "@/lib/shadcn";
+import { cn } from "@/lib/shadcn/shadcn";
 
 const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
   const side_spacing = "1rem";

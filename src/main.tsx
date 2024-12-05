@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router";
 
 import App from "./App.tsx";
-import store from './stores/store.ts';
+import store from '@/lib/redux/store.ts';
 
 import "./assets/styles/normalize.css";
 import "./index.css";
