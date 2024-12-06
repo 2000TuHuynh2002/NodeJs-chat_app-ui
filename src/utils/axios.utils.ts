@@ -37,4 +37,21 @@ const apiLogout = async () => {
     });
 };
 
-export { apiLogin, apiLogout };
+const apiRefresh = async () => {
+  return axios({
+    method: "POST",
+    url: `http://${API_URL}/api/auth/refreshToken`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  })
+    .then((response) => {
+      return [response.status, response.data];
+    })
+    .catch((error) => {
+      return [error.response.status, error.response.data];
+    });
+};
+
+export { apiLogin, apiLogout, apiRefresh };

@@ -1,28 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCookie } from "@/utils/cookie.utils";
+import { isCookieExist } from "@/utils/cookie.utils";
+
+const init_user = sessionStorage.getItem("user") as string;
+const init_accessToken = sessionStorage.getItem("accessToken") as string;
 
 const initialState = {
-  user: null,
-  accessToken: localStorage.getItem("accessToken"),
-  isAuthenticated: getCookie("isLoggedIn") || false,
+  user: JSON.parse(init_user) || null,
+  accessToken: JSON.parse(init_accessToken) || null,
+  isAuthenticated: isCookieExist("isLoggedIn"),
   isLoading: false,
   error: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: initialState,
   reducers: {
     setTokens: (state, action) => {
-      const { accessToken } = action.payload.accessToken;
+      const { user, accessToken } = action.payload;
+      state.user = user;
       state.accessToken = accessToken;
       state.isAuthenticated = true;
-      localStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("accessToken", JSON.stringify(accessToken));
+      sessionStorage.setItem("user", JSON.stringify(user));
     },
     logout: (state) => {
+      state.user = null;
       state.accessToken = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("accessToken");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("user");
     },
   },
 });
