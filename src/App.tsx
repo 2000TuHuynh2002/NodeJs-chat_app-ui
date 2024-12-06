@@ -1,9 +1,7 @@
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import Cookies from "js-cookie";
-
+import { Routes, Route, Navigate, Outlet } from "react-router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
-
-import { isCookieExist } from "./utils/cookie.utils";
 
 import MainLayout from "./layouts/MainLayout";
 import About from "./pages/main/About";
@@ -11,26 +9,30 @@ import Home from "./pages/main/Home";
 import Profile from "./pages/main/Profile";
 import Settings from "./pages/main/Settings";
 import Dashboard from "./pages/main/Dashboard";
-
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-
 import Messages from "./pages/chat_app/Chat";
-
 import NotFound from "./pages/error/404";
 
+import { checkAndRefreshToken } from "./utils/auth.utils";
 import "./App.css";
 
 const ProtectedRoute = () => {
-  return isCookieExist("token") ? <Outlet /> : <Navigate to="/auth/login" />;
+  const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);
+  return isLoggedIn ? <Outlet /> : <Navigate to="/auth/login" />;
 };
 
 const AuthRoute = () => {
-  return isCookieExist("token") ? <Navigate to="/" /> : <Outlet />;
+  const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);
+  return isLoggedIn ? <Navigate to="/" /> : <Outlet />;
 };
 
 const App = () => {
+  useEffect(() => {
+    checkAndRefreshToken();
+  }, []);
+
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Routes>

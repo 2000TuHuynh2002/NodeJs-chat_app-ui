@@ -1,7 +1,7 @@
 "use client";
 
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui-shadcn/button";
 import {
@@ -13,11 +13,14 @@ import {
   FormMessage,
 } from "@/components/ui-shadcn/form";
 import { Input } from "@/components/ui-shadcn/input";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { setTokens } from "@/lib/redux/auth/authSlice";
+import { apiLogin } from "@/utils/axios.utils";
 
 const LoginForm = () => {
   const formSchema = z.object({
@@ -33,12 +36,21 @@ const LoginForm = () => {
     },
   });
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    Cookies.set("token", "authenticated");
-    navigate("/");
+    const [status, response] = await apiLogin(data);
+    if (status === 200) {
+      const { accessToken, user } = response;
+      dispatch(setTokens({ accessToken, user }));
+      navigate("/");
+    } else {
+      form.setError("username", {
+        type: "manual",
+        message: response.error,
+      });
+    }
   };
 
   return (

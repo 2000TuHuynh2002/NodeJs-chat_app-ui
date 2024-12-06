@@ -1,7 +1,6 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-import { deleteCookie } from "@/utils/cookie.utils";
+import { Link, useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
 
 import {
   Avatar,
@@ -17,7 +16,10 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui-shadcn/dropdown-menu";
+
 import { ModeToggle } from "@/components/ui-shadcn/mode-toggle";
+import { logout } from "@/lib/redux/auth/authSlice";
+import { apiLogout } from "@/utils/axios.utils";
 
 interface NavbarUserPanelProps extends React.HTMLAttributes<HTMLElement> {
   spacing?: string;
@@ -35,11 +37,17 @@ const NavbarBrand = ({
     settings: { label: "Setting", path: "/settings", shortcut: "⇧P" },
   };
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    deleteCookie("token");
-    navigate("/auth/login");
+  const handleLogout = async () => {
+    const [status, response] = await apiLogout();
+    if (status === 200) {
+      dispatch(logout());
+      navigate("/auth/login");
+    } else {
+      console.error(response.error);
+    }
   };
 
   return (

@@ -1,9 +1,9 @@
 import React from "react";
 import { BsBook } from "react-icons/bs";
 import { FaRegMessage } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { navigationMenuTriggerStyle } from "@/components/ui-shadcn/navigation-menu";
-import { cn } from "@/lib/shadcn";
+import { cn } from "@/lib/shadcn/shadcn";
 
 const NavbarMenu = ({
   className,
