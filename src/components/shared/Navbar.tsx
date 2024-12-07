@@ -5,15 +5,14 @@ import NavbarUserPanel from "@/components/shared/NavbarUserPanel";
 import { cn } from "@/lib/shadcn/shadcn";
 
 const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
-  const side_spacing = "1rem";
   return (
     <div className={cn("", className)} {...props}>
-      <div className={`flex h-[3.5rem] items-center px-[${side_spacing}]`}>
-        <NavbarBrand to="/" className="h-10 w-10" />
-        <NavbarUserPanel src="" className="ml-auto flex space-x-2" spacing={side_spacing} />
+      <div className={`flex h-[3.5rem] items-center`}>
+        <NavbarBrand to="/" className="h-10 w-10 ml-2" />
+        <NavbarUserPanel src="" className="ml-auto flex space-x-2 mr-2"/>
       </div>
-      <div className={`h-[3rem] px-[${side_spacing}]`}>
-        <NavbarMenu className="h-full space-x-2" />
+      <div className={`h-[3rem]`}>
+        <NavbarMenu className="h-full" />
       </div>
     </div>
   );

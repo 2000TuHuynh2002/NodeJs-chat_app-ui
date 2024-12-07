@@ -15,7 +15,6 @@ const NavbarBrand = ({ className, to, ...props }: NavbarBrandProps) => {
         className={cn("h-8 w-8", className)}
         {...props}
       />
-      <h2 className="my-auto mx-2 font-semibold">Username</h2>
     </Link>
   );
 };

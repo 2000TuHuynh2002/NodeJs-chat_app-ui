@@ -5,8 +5,8 @@ const init_user = sessionStorage.getItem("user") as string;
 const init_accessToken = sessionStorage.getItem("accessToken") as string;
 
 const initialState = {
-  user: JSON.parse(init_user) || null,
-  accessToken: JSON.parse(init_accessToken) || null,
+  user: JSON.parse(init_user) || {},
+  accessToken: JSON.parse(init_accessToken) || {},
   isAuthenticated: isCookieExist("isLoggedIn"),
   isLoading: false,
   error: null,

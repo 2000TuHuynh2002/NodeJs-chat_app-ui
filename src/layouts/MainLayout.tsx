@@ -5,7 +5,9 @@ const MainLayout = () => {
   return (
     <>
       <Navbar className="border-b" />
-      <Outlet />
+      <div className="container mt-[2rem]">
+        <Outlet />
+      </div>
     </>
   );
 };
