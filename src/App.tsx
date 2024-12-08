@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate, Outlet } from "react-router";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
 import MainLayout from "./layouts/MainLayout";
@@ -9,13 +8,16 @@ import Home from "./pages/main/Home";
 import Profile from "./pages/main/Profile";
 import Settings from "./pages/main/Settings";
 import Dashboard from "./pages/main/Dashboard";
+
+import ChatLayout from "./layouts/ChatLayout";
+
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Messages from "./pages/chat_app/Chat";
+
 import NotFound from "./pages/error/404";
 
-import { checkAndRefreshToken } from "./utils/auth.utils";
 import "./App.css";
 
 const ProtectedRoute = () => {
@@ -29,10 +31,6 @@ const AuthRoute = () => {
 };
 
 const App = () => {
-  useEffect(() => {
-    checkAndRefreshToken();
-  }, []);
-
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Routes>
@@ -46,7 +44,7 @@ const App = () => {
             <Route path="settings" element={<Settings />} />
           </Route>
 
-          <Route path="chat">
+          <Route path="chat" element={<ChatLayout />}>
             <Route path="messages" element={<Messages />} />
           </Route>
         </Route>

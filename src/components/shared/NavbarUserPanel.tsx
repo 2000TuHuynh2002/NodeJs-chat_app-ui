@@ -49,8 +49,11 @@ const NavbarBrand = ({
     }
   };
 
-  const userFullName = useSelector((state: any) => state.user.fullName);
-  const username= useSelector((state: any) => state.user.username);
+  const username = useSelector((state: any) => state.auth.user.username);
+
+  const userFistName = useSelector((state: any) => state.auth.user.firstName);
+  const userLastName = useSelector((state: any) => state.auth.user.lastName);
+  const userFullName = `${userFistName} ${userLastName}`;
 
   return (
     <div className={className} {...props}>
@@ -67,7 +70,9 @@ const NavbarBrand = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="mt-[0.5rem] mr-[0.5rem] w-[16rem]">
             <DropdownMenuLabel>{username}</DropdownMenuLabel>
-            <p className="ml-2 text-sm text-slate-500 truncate">{userFullName}</p>
+            <p className="ml-2 text-sm text-slate-500 truncate">
+              {userFullName}
+            </p>
             <DropdownMenuSeparator />
             <Link key="Profile" to="/profile">
               <DropdownMenuItem>

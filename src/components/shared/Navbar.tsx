@@ -6,10 +6,10 @@ import { cn } from "@/lib/shadcn/shadcn";
 
 const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
   return (
-    <div className={cn("", className)} {...props}>
+    <div className={cn("dark:bg-[#010409]", className)} {...props}>
       <div className={`flex h-[3.5rem] items-center`}>
         <NavbarBrand to="/" className="h-10 w-10 ml-2" />
-        <NavbarUserPanel src="" className="ml-auto flex space-x-2 mr-2"/>
+        <NavbarUserPanel src="" className="ml-auto flex space-x-2 mr-2" />
       </div>
       <div className={`h-[3rem]`}>
         <NavbarMenu className="h-full" />
