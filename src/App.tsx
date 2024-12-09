@@ -3,18 +3,17 @@ import { useSelector } from "react-redux";
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
 import MainLayout from "./layouts/MainLayout";
+import Container from "./components/shared/Container";
 import About from "./pages/main/About";
 import Home from "./pages/main/Home";
 import Profile from "./pages/main/Profile";
 import Settings from "./pages/main/Settings";
 import Dashboard from "./pages/main/Dashboard";
-
-import ChatLayout from "./layouts/ChatLayout";
+import Messages from "./pages/chat_app/Chat";
 
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import Messages from "./pages/chat_app/Chat";
 
 import NotFound from "./pages/error/404";
 
@@ -36,16 +35,18 @@ const App = () => {
       <Routes>
         {/* Main-application pages */}
         <Route element={<ProtectedRoute />}>
-          <Route path="" element={<MainLayout />}>
-            <Route path="" element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="settings" element={<Settings />} />
-          </Route>
+          <Route path="/" element={<MainLayout />}>
+            <Route element={<Container />}>
+              <Route index element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
 
-          <Route path="chat" element={<ChatLayout />}>
-            <Route path="messages" element={<Messages />} />
+            <Route path="chat">
+              <Route path="messages" element={<Messages />} />
+            </Route>
           </Route>
         </Route>
 

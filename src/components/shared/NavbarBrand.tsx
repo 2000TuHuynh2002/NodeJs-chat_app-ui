@@ -1,20 +1,13 @@
-import React from "react";
 import { Link } from "react-router";
-import { cn } from "@/lib/shadcn/shadcn";
 
-interface NavbarBrandProps extends React.HTMLAttributes<HTMLElement> {
+interface NavbarBrandProps {
   to: string;
 }
 
-const NavbarBrand = ({ className, to, ...props }: NavbarBrandProps) => {
+const NavbarBrand = ({ to, ...props }: NavbarBrandProps) => {
   return (
     <Link to={to || "#"} className="flex">
-      <img
-        src="/react.svg"
-        alt="Logo"
-        className={cn("h-8 w-8", className)}
-        {...props}
-      />
+      <img src="/react.svg" alt="Logo" className="h-8 ml-2" {...props} />
     </Link>
   );
 };

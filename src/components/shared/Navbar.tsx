@@ -4,15 +4,15 @@ import NavbarMenu from "@/components/shared/NavbarMenu";
 import NavbarUserPanel from "@/components/shared/NavbarUserPanel";
 import { cn } from "@/lib/shadcn/shadcn";
 
-const Navbar = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
+const Navbar: React.FC = ({ ...props }) => {
   return (
-    <div className={cn("dark:bg-[#010409]", className)} {...props}>
+    <div className={cn("dark:bg-[#010409] border-b")} {...props}>
       <div className={`flex h-[3.5rem] items-center`}>
-        <NavbarBrand to="/" className="h-10 w-10 ml-2" />
+        <NavbarBrand to="/" />
         <NavbarUserPanel src="" className="ml-auto flex space-x-2 mr-2" />
       </div>
       <div className={`h-[3rem]`}>
-        <NavbarMenu className="h-full" />
+        <NavbarMenu />
       </div>
     </div>
   );
