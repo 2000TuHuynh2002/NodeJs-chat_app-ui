@@ -9,7 +9,6 @@ const NavbarMenu: React.FC = () => {
   const pathDict = {
     dashboard: { name: "Dashboard", path: "/dashboard", icon: BsBook },
     messages: { name: "Messages", path: "/chat/messages", icon: FaRegMessage },
-    about: { name: "About", path: "/about", icon: FaRegMessage },
   };
 
   const currentPath = useLocation().pathname;

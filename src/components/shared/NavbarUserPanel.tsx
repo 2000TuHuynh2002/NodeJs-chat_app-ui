@@ -22,7 +22,7 @@ import { FiSettings } from "react-icons/fi";
 import { TbLogout } from "react-icons/tb";
 
 import { ModeToggle } from "@/components/ui-shadcn/mode-toggle";
-import { logout } from "@/lib/redux/auth/authSlice";
+import { logout } from "@/store/auth/authSlice";
 import { apiLogout } from "@/utils/axios.utils";
 
 interface NavbarUserPanelProps extends React.HTMLAttributes<HTMLElement> {
