@@ -6,7 +6,7 @@ import NavbarUserPanel from "@/components/shared/NavbarUserPanel";
 const Navbar: React.FC = ({ ...props }) => {
   return (
     <div
-      className="dark:bg-[#010409] border-b-2 border-black dark:border-white"
+      className="dark:bg-[#010409] border-b-2 border-black dark:border-slate-600"
       {...props}
     >
       <div className={`flex h-[3.5rem] items-center`}>
