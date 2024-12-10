@@ -22,8 +22,8 @@ const NavbarMenu: React.FC = () => {
           key={key}
           to={item.path}
           className={cn(
-            "bg-inherit group inline-flex h-full items-center border-b-2 border-transparent justify-center px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-            isActive(item.path) && "border-b-2 border-blue-500"
+            "bg-inherit group inline-flex h-full items-center border-b-4 border-transparent justify-center px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+            isActive(item.path) && "border-b-4 border-blue-700"
           )}
         >
           <item.icon className="mr-2" strokeWidth="0.2" />
