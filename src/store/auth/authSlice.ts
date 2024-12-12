@@ -4,11 +4,15 @@ import { isCookieExist } from "@/utils/cookie.utils";
 import { apiRefresh } from "@/utils/axios.utils";
 
 if (isCookieExist("isLoggedIn") && !sessionStorage.getItem("accessToken")) {
-  const [_, response] = await apiRefresh();
   try {
-    const { accessToken, user } = response;
-    sessionStorage.setItem("accessToken", JSON.stringify(accessToken));
-    sessionStorage.setItem("user", JSON.stringify(user));
+    const [status, response] = await apiRefresh();
+    if (status === 200) {
+      const { accessToken, user } = response;
+      sessionStorage.setItem("accessToken", JSON.stringify(accessToken));
+      sessionStorage.setItem("user", JSON.stringify(user));
+    } else {
+      sessionStorage.clear();
+    }
   } catch (error) {
     console.error("Failed to get access token:", error);
   }

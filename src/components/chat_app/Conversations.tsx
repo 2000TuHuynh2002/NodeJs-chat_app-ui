@@ -1,10 +1,10 @@
 import { useContext } from "react";
 
-import { SocketContext } from "@/contexts/socket.context";
-
 import { Input } from "@/components/ui-shadcn/input";
 import { IoIosSend } from "react-icons/io";
 import { FaPaperclip } from "react-icons/fa6";
+
+import { SocketContext } from "@/contexts/socket.context";
 
 const Conversations = () => {
   const socket = useContext(SocketContext);

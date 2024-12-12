@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
-
 import MainLayout from "@/layouts/MainLayout";
 import Container from "@/components/shared/Container";
 import About from "@/pages/main/About";
