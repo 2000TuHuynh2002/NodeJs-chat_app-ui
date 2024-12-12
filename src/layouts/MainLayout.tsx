@@ -4,7 +4,7 @@ import Navbar from "@/components/shared/Navbar";
 const MainLayout = () => {
   return (
     <>
-      <Navbar className="border-b" />
+      <Navbar />
       <Outlet />
     </>
   );

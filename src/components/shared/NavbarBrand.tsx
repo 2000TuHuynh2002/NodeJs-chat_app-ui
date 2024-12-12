@@ -1,21 +1,21 @@
-import React from "react";
 import { Link } from "react-router";
-import { cn } from "@/lib/shadcn/shadcn";
+import { useSelector } from "react-redux";
 
-interface NavbarBrandProps extends React.HTMLAttributes<HTMLElement> {
+interface NavbarBrandProps {
   to: string;
 }
 
-const NavbarBrand = ({ className, to, ...props }: NavbarBrandProps) => {
+const NavbarBrand = ({ to, ...props }: NavbarBrandProps) => {
+  const userFirstName = useSelector((state: any) => state.auth.user.firstName);
+  const userLastName = useSelector((state: any) => state.auth.user.lastName);
+  const userFullName = `${userFirstName} ${userLastName}`;
+
   return (
     <Link to={to || "#"} className="flex">
-      <img
-        src="/react.svg"
-        alt="Logo"
-        className={cn("h-8 w-8", className)}
-        {...props}
-      />
-      <h2 className="my-auto mx-2 font-semibold">Username</h2>
+      <img src="/react.svg" alt="Logo" className="h-8 ml-2" {...props} />
+      <h1 className="ml-4 mt-2 text-xl font-semibold font-serif">
+        {userFullName}
+      </h1>
     </Link>
   );
 };

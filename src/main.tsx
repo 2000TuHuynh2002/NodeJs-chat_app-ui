@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router";
 import { StrictMode } from "react";
 
 import App from "./App.tsx";
-import store from "@/lib/redux/store.ts";
+import store from "@/store/store.ts";
 
 import "./assets/styles/normalize.css";
 import "./index.css";

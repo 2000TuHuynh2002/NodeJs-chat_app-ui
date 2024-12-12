@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   Avatar,
@@ -17,8 +17,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui-shadcn/dropdown-menu";
 
+import { FaRegCircleUser } from "react-icons/fa6";
+import { FiSettings } from "react-icons/fi";
+import { TbLogout } from "react-icons/tb";
+
 import { ModeToggle } from "@/components/ui-shadcn/mode-toggle";
-import { logout } from "@/lib/redux/auth/authSlice";
+import { logout } from "@/store/auth/authSlice";
 import { apiLogout } from "@/utils/axios.utils";
 
 interface NavbarUserPanelProps extends React.HTMLAttributes<HTMLElement> {
@@ -32,11 +36,6 @@ const NavbarBrand = ({
   src,
   ...props
 }: NavbarUserPanelProps) => {
-  const menuItems = {
-    profile: { label: "Profile", path: "/profile" },
-    settings: { label: "Setting", path: "/settings", shortcut: "⇧P" },
-  };
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,6 +48,12 @@ const NavbarBrand = ({
       console.error(response.error);
     }
   };
+
+  const username = useSelector((state: any) => state.auth.user.username);
+
+  const userFistName = useSelector((state: any) => state.auth.user.firstName);
+  const userLastName = useSelector((state: any) => state.auth.user.lastName);
+  const userFullName = `${userFistName} ${userLastName}`;
 
   return (
     <div className={className} {...props}>
@@ -63,20 +68,29 @@ const NavbarBrand = ({
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className={`mr-[${spacing}]`}>
-            <DropdownMenuLabel>My username</DropdownMenuLabel>
+          <DropdownMenuContent className="mt-[0.5rem] mr-[0.5rem] w-[16rem]">
+            <DropdownMenuLabel>{username}</DropdownMenuLabel>
+            <p className="ml-2 text-sm text-slate-500 truncate">
+              {userFullName}
+            </p>
             <DropdownMenuSeparator />
-            {Object.values(menuItems).map((item) => (
-              <Link key={item.label} to={item.path}>
-                <DropdownMenuItem>
-                  {item.label}
-                  {"shortcut" in item && (
-                    <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
-                  )}
-                </DropdownMenuItem>
-              </Link>
-            ))}
-            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            <Link key="Profile" to="/profile">
+              <DropdownMenuItem>
+                <FaRegCircleUser className="mr-2" />
+                Profile
+              </DropdownMenuItem>
+            </Link>
+            <Link key="Settings" to="/settings">
+              <DropdownMenuItem>
+                <FiSettings className="mr-2" />
+                Settings
+                <DropdownMenuShortcut>"⇧P"</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem onClick={handleLogout}>
+              <TbLogout className="mr-2" />
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

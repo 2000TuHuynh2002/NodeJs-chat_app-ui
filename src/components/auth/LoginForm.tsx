@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { setTokens } from "@/lib/redux/auth/authSlice";
+import { setTokens } from "@/store/auth/authSlice";
 import { apiLogin } from "@/utils/axios.utils";
 
 const LoginForm = () => {
