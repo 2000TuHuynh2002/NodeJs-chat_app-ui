@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -25,6 +25,8 @@ import { ModeToggle } from "@/components/ui-shadcn/mode-toggle";
 import { logout } from "@/store/auth/authSlice";
 import { apiLogout } from "@/utils/axios.utils";
 
+import { SocketContext } from "@/contexts/socket.context";
+
 interface NavbarUserPanelProps extends React.HTMLAttributes<HTMLElement> {
   spacing?: string;
   src?: string;
@@ -39,10 +41,13 @@ const NavbarBrand = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const socket = useContext(SocketContext);
+
   const handleLogout = async () => {
     const [status, response] = await apiLogout();
     if (status === 200) {
       dispatch(logout());
+      socket.disconnect();
       navigate("/auth/login");
     } else {
       console.error(response.error);
