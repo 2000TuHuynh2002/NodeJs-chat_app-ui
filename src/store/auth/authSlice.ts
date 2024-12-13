@@ -1,22 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { isCookieExist } from "@/utils/cookie.utils";
-import { apiRefresh } from "@/utils/axios.utils";
-
-if (isCookieExist("isLoggedIn") && !sessionStorage.getItem("accessToken")) {
-  try {
-    const [status, response] = await apiRefresh();
-    if (status === 200) {
-      const { accessToken, user } = response;
-      sessionStorage.setItem("accessToken", JSON.stringify(accessToken));
-      sessionStorage.setItem("user", JSON.stringify(user));
-    } else {
-      sessionStorage.clear();
-    }
-  } catch (error) {
-    console.error("Failed to get access token:", error);
-  }
-}
 
 const init_user = sessionStorage.getItem("user") as string;
 const init_accessToken = sessionStorage.getItem("accessToken") as string;
@@ -45,8 +29,7 @@ const authSlice = createSlice({
       state.user = null;
       state.accessToken = null;
       state.isAuthenticated = false;
-      sessionStorage.removeItem("accessToken");
-      sessionStorage.removeItem("user");
+      sessionStorage.clear();
     },
   },
 });

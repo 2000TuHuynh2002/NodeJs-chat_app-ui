@@ -18,7 +18,18 @@ import Register from "@/pages/auth/Register";
 
 import NotFound from "@/pages/error/404";
 
+import { apiRefresh } from "@/utils/axios.utils";
+import { isCookieExist } from "@/utils/cookie.utils";
+
 import "@/App.css";
+
+if (isCookieExist("isLoggedIn") && !sessionStorage.getItem("accessToken")) {
+  try {
+    apiRefresh();
+  } catch (error) {
+    console.error("Failed to get access token:", error);
+  }
+}
 
 const ProtectedRoute = () => {
   const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);

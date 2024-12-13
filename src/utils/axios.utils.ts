@@ -1,5 +1,8 @@
 import axios from "axios";
 
+import { setTokens, logout } from "@/store/auth/authSlice";
+import store from "@/store/store";
+
 const API_URL = process.env.API_URL || "localhost:3000";
 
 const apiLogin = async (data: any) => {
@@ -47,11 +50,36 @@ const apiRefresh = async () => {
     withCredentials: true,
   })
     .then((response) => {
+      const { accessToken, user } = response.data;
+      store.dispatch(setTokens({ accessToken, user }));
+      return [response.status, response.data];
+    })
+    .catch((error) => {
+      // store.dispatch(logout());
+      return [error.response.status, error.response.data];
+    });
+};
+
+const apiFindUserByUsername = async (username: string) => {
+  const accessToken = sessionStorage.getItem("accessToken") as string;
+  const token = JSON.parse(accessToken) || {};
+
+  return axios({
+    method: "GET",
+    url: `http://${API_URL}/api/user/username/${username}`,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token.token}`,
+    },
+    withCredentials: true,
+    data: username,
+  })
+    .then((response) => {
       return [response.status, response.data];
     })
     .catch((error) => {
       return [error.response.status, error.response.data];
     });
-};
+}
 
-export { apiLogin, apiLogout, apiRefresh };
+export { apiLogin, apiLogout, apiRefresh, apiFindUserByUsername };

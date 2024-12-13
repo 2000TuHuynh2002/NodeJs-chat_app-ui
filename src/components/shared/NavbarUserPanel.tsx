@@ -26,13 +26,11 @@ import { logout } from "@/store/auth/authSlice";
 import { apiLogout } from "@/utils/axios.utils";
 
 interface NavbarUserPanelProps extends React.HTMLAttributes<HTMLElement> {
-  spacing?: string;
   src?: string;
 }
 
 const NavbarBrand = ({
   className,
-  spacing,
   src,
   ...props
 }: NavbarUserPanelProps) => {
