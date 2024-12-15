@@ -9,36 +9,30 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui-shadcn/carousel";
-import { Card, CardContent } from "@/components/ui-shadcn/card"
-const ActiveFriend = () => {
-  const height = "5rem";
-  const spacing = 6;
-  const concurrent = 5;
+} from "@/components/ui-shadcn/carousel"
+ 
 
+const ActiveFriend = () => {
+  const concurent = 4;
   return (
-    <>
-    <Carousel
-      opts={{
-        align: "start",
-      }}
-      className="w-[75%] mx-auto mt-[1rem] ring-2"
-    >
-      <CarouselContent className="-ml-2">
+    <Carousel   opts={{
+      align: "start",
+    }} className="w-[18rem] mx-auto mt-[1rem]">
+      <CarouselContent className={`-ml-${concurent + 1} h-[4rem] `}>
         {Array.from({ length: 10 }).map((_, index) => (
-          <CarouselItem key={index} className="pl-2 basis-1/5">
-              <Card className="">
-                <CardContent className="flex aspect-square items-center justify-center">
-                  <span className="text-3xl font-semibold">{index + 1}</span>
-                </CardContent>
-              </Card>
+          <CarouselItem key={index} className={`my-auto pl-${concurent + 1} basis-1/${concurent}`}>
+            <div className="pl-2">
+              <Avatar className="w-[3.5rem] h-[3.5rem] ring-[3px]">
+                <AvatarImage src="" />
+                <AvatarFallback>{index}</AvatarFallback>
+              </Avatar>
+            </div>
           </CarouselItem>
         ))}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
-    </>
   );
 };
 
