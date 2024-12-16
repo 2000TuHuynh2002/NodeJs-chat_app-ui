@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   id: "",
-  friend: "",
+  friend_username: "",
+  friend_fullName: "",
 };
 
 const conversationSlice = createSlice({
@@ -10,9 +11,10 @@ const conversationSlice = createSlice({
   initialState: initialState,
   reducers: {
     currentConversation: (state, action) => {
-      const { conversation_id, friend } = action.payload;
+      const { conversation_id, friend_fullName, friend_username } = action.payload;
       state.id = conversation_id;
-      state.friend = friend;
+      state.friend_username = friend_username;
+      state.friend_fullName = friend_fullName;
     },
   },
 });

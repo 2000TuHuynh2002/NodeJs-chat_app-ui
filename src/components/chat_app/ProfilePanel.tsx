@@ -7,8 +7,8 @@ import {
 } from "@/components/ui-shadcn/avatar";
 
 const ProfilePanel = () => {
-  const friendName = useSelector((state: any) => state.conversation.friend);
-  const friendId = useSelector((state: any) => state.conversation.id);
+  const friend_fullName = useSelector((state: any) => state.conversation.friend_fullName);
+  const friend_username = useSelector((state: any) => state.conversation.friend_username);
 
   return (
     <>
@@ -17,9 +17,9 @@ const ProfilePanel = () => {
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <h1 className="text-2xl text-center font-semibold mt-[1rem] tracking-tight">
-        {friendName}
+        {friend_fullName}
       </h1>
-      <p className="text-xl text-center text-slate-500">@friend{friendId}</p>
+      <p className="text-xl text-center text-slate-500">@{friend_username}</p>
       <hr className="rounded mt-[2rem]"></hr>
       <p className="text-lg font-semibold mt-[1rem] ml-[1rem] tracking-tight">Shared Photos</p>
     </>
