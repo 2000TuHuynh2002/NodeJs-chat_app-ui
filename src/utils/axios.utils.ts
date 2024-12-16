@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { setTokens, logout } from "@/store/auth/authSlice";
 import store from "@/store/store";
+import { data } from "react-router";
 
 const API_URL = process.env.API_URL || "localhost:3000";
 
@@ -55,7 +56,7 @@ const apiRefresh = async () => {
       return [response.status, response.data];
     })
     .catch((error) => {
-      // store.dispatch(logout());
+      store.dispatch(logout());
       return [error.response.status, error.response.data];
     });
 };
@@ -69,7 +70,7 @@ const apiFindUserByUsername = async (username: string) => {
     url: `http://${API_URL}/api/user/username/${username}`,
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token.token}`,
+      Authorization: `Bearer ${token.token}`,
     },
     withCredentials: true,
     data: username,
@@ -80,6 +81,62 @@ const apiFindUserByUsername = async (username: string) => {
     .catch((error) => {
       return [error.response.status, error.response.data];
     });
+};
+
+const apiGetRecentMessages = async () => {
+  const accessToken = sessionStorage.getItem("accessToken") as string;
+  const token = JSON.parse(accessToken) || {};
+
+  return axios({
+    method: "GET",
+    url: `http://${API_URL}/api/message/recent/`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token.token}`,
+    },
+    withCredentials: true,
+  })
+    .then((response) => {
+      return [response.status, response.data];
+    })
+    .catch((error) => {
+      return [error.response.status, error.response.data];
+    });
+};
+
+const apiCreateConversation = async (username: string) => {
+  const accessToken = sessionStorage.getItem("accessToken") as string;
+  const token = JSON.parse(accessToken) || {};
+
+  const data = {
+    username01: username,
+    username02: "admin",
+  };
+
+
+  return axios({
+    method: "POST",
+    url: `http://${API_URL}/api/room/create`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token.token}`,
+    },
+    withCredentials: true,
+    data: data,
+  })
+    .then((response) => {
+      return [response.status, response.data];
+    })
+    .catch((error) => {
+      return [error.response.status, error.response.data];
+    });
 }
 
-export { apiLogin, apiLogout, apiRefresh, apiFindUserByUsername };
+export {
+  apiLogin,
+  apiLogout,
+  apiRefresh,
+  apiFindUserByUsername,
+  apiGetRecentMessages,
+  apiCreateConversation
+};

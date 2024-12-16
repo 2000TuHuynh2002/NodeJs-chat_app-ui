@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteDB } from 'idb';
 
 import {
   Avatar,
@@ -41,6 +42,7 @@ const NavbarBrand = ({
     const [status, response] = await apiLogout();
     if (status === 200) {
       dispatch(logout());
+      await deleteDB('chat_app');
       navigate("/auth/login");
     } else {
       console.error(response.error);

@@ -19,7 +19,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { apiFindUserByUsername } from "@/utils/axios.utils";
-import { apiRefresh } from "@/utils/axios.utils";
+import { apiRefresh,apiCreateConversation } from "@/utils/axios.utils";
 
 const SearchBar = () => {
   const formSchema = z.object({
@@ -40,21 +40,19 @@ const SearchBar = () => {
 
     const [status, response] = await apiFindUserByUsername(data.findUser);
     if (status === 401 && response.error === "Access token expired") {
-      apiRefresh();
-      onSubmitHandler(data);
+      await apiRefresh();
+      await onSubmitHandler(data);
       return;
     }
 
     if (status === 404) {
-      form.setError("findUser", {
-        type: "manual",
-        message: response.error,
-      });
+      toast.error("User not found!");
       return;
     }
 
     if (status === 200) {
       form.reset();
+      await apiCreateConversation(data.findUser);
       toast.success("User found!");
       return;
     }

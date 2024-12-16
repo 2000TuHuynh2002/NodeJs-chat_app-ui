@@ -2,6 +2,7 @@
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { openDB } from "idb";
 
 import { Button } from "@/components/ui-shadcn/button";
 import {
@@ -20,7 +21,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { setTokens } from "@/store/auth/authSlice";
-import { apiLogin } from "@/utils/axios.utils";
+import { apiGetRecentMessages, apiLogin } from "@/utils/axios.utils";
 
 const LoginForm = () => {
   const formSchema = z.object({
@@ -41,16 +42,53 @@ const LoginForm = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const [status, response] = await apiLogin(data);
-    if (status === 200) {
-      const { accessToken, user } = response;
-      dispatch(setTokens({ accessToken, user }));
-      navigate("/");
-    } else {
+    if (status !== 200) {
       form.setError("username", {
         type: "manual",
         message: response.error,
       });
+      return;
     }
+
+    const { accessToken, user } = response;
+    dispatch(setTokens({ accessToken, user }));
+
+    const [messageStatus, messageResponse] = await apiGetRecentMessages();
+    if (messageStatus !== 200) {
+      form.setError("username", {
+        type: "manual",
+        message: response.error,
+      });
+      return;
+    }
+
+    const db = await openDB("chat_app", 1, {
+      upgrade(db) {
+        if (!db.objectStoreNames.contains("messages")) {
+          db.createObjectStore("messages", {
+            keyPath: "id",
+            autoIncrement: true,
+          });
+        }
+      },
+    });
+
+    console.log("messageResponse", messageResponse);
+
+    const tx = db.transaction("messages", "readwrite");
+    const store = tx.objectStore("messages");
+
+    if (Array.isArray(messageResponse.recentMessages)) {
+      for (const message of messageResponse.recentMessages) {
+        store.add(message);
+      }
+    } else {
+      console.error("messageResponse.recentMessages is not an array");
+    }
+
+    await tx.done;
+
+    navigate("/");
   };
 
   return (
