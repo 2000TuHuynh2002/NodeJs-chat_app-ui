@@ -5,12 +5,14 @@ import { IoIosSend } from "react-icons/io";
 import { FaPaperclip } from "react-icons/fa6";
 
 import { SocketContext } from "@/contexts/socket.context";
+import { apiSendMessage } from "@/api/message.api";
 
 const Conversations = () => {
   const socket = useContext(SocketContext);
 
-  const sendMessage = () => {
-    socket.emit("message", "Hello from the client");
+  const sendMessage = async (message: string) => {
+    socket.emit("sendMessage", "Hello from the client");
+    apiSendMessage(message);
   };
 
   return (
@@ -31,7 +33,7 @@ const Conversations = () => {
       {/* Send button */}
       <button
         className="absolute bottom-[0.25rem] right-[0.5rem] rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 hover:cursor-pointer"
-        onClick={sendMessage}
+        onClick={() => sendMessage("Hello")}
       >
         <IoIosSend className="w-[2.5rem] h-[2.5rem] p-2" />
       </button>

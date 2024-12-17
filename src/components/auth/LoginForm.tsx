@@ -21,7 +21,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { setTokens } from "@/store/slides/authSlice";
-import { apiGetRecentMessages, apiLogin } from "@/api/auth.api";
+
+import { apiLogin } from "@/api/auth.api";
+import { apiGetRecent } from "@/api/message.api";
 
 const LoginForm = () => {
   const formSchema = z.object({
@@ -53,7 +55,7 @@ const LoginForm = () => {
     const { accessToken, user } = response;
     dispatch(setTokens({ accessToken, user }));
 
-    const [messageStatus, messageResponse] = await apiGetRecentMessages();
+    const [messageStatus, messageResponse] = await apiGetRecent();
     if (messageStatus !== 200) {
       form.setError("username", {
         type: "manual",

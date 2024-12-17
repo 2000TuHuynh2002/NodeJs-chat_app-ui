@@ -60,82 +60,8 @@ const apiRefresh = async () => {
     });
 };
 
-const apiFindUserByUsername = async (username: string) => {
-  const accessToken = sessionStorage.getItem("accessToken") as string;
-  const token = JSON.parse(accessToken) || {};
-
-  return axios({
-    method: "GET",
-    url: `http://${API_URL}/api/user/username/${username}`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.token}`,
-    },
-    withCredentials: true,
-    data: username,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
-};
-
-const apiGetRecentMessages = async () => {
-  const accessToken = sessionStorage.getItem("accessToken") as string;
-  const token = JSON.parse(accessToken) || {};
-
-  return axios({
-    method: "GET",
-    url: `http://${API_URL}/api/message/recent/`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.token}`,
-    },
-    withCredentials: true,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
-};
-
-const apiCreateConversation = async (username: string) => {
-  const accessToken = sessionStorage.getItem("accessToken") as string;
-  const token = JSON.parse(accessToken) || {};
-
-  const data = {
-    username01: username,
-    username02: "admin",
-  };
-
-
-  return axios({
-    method: "POST",
-    url: `http://${API_URL}/api/room/create`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.token}`,
-    },
-    withCredentials: true,
-    data: data,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
-}
-
 export {
   apiLogin,
   apiLogout,
   apiRefresh,
-  apiFindUserByUsername,
-  apiGetRecentMessages,
-  apiCreateConversation
 };

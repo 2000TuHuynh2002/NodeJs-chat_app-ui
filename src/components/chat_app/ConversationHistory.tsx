@@ -28,6 +28,7 @@ const ConversationsHistory = () => {
     dispatch(
       currentConversation({
         conversation_id: conversation.id,
+        friend_id:  user.id,
         friend_username: user.username,
         friend_fullName: `${user.firstName} ${user.lastName}`,
       })

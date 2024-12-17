@@ -18,8 +18,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { apiFindUserByUsername } from "@/api/auth.api";
-import { apiRefresh,apiCreateConversation } from "@/api/auth.api";
+import { apiRefresh } from "@/api/auth.api";
+import { apiCreateRoom } from "@/api/room.api";
+import { apiFindByUsername } from "@/api/user.api";
 
 const SearchBar = () => {
   const formSchema = z.object({
@@ -38,7 +39,7 @@ const SearchBar = () => {
       return;
     }
 
-    const [status, response] = await apiFindUserByUsername(data.findUser);
+    const [status, response] = await apiFindByUsername(data.findUser);
     if (status === 401 && response.error === "Access token expired") {
       await apiRefresh();
       await onSubmitHandler(data);
@@ -52,7 +53,7 @@ const SearchBar = () => {
 
     if (status === 200) {
       form.reset();
-      await apiCreateConversation(data.findUser);
+      await apiCreateRoom(data.findUser);
       toast.success("User found!");
       return;
     }
