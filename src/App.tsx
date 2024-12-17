@@ -18,7 +18,7 @@ import Register from "@/pages/auth/Register";
 
 import NotFound from "@/pages/error/404";
 
-import { apiRefresh } from "@/utils/axios.utils";
+import { apiRefresh } from "@/api/auth.api";
 import { isCookieExist } from "@/utils/cookie.utils";
 
 import "@/App.css";

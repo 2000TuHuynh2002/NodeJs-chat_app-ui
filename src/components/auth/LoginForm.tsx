@@ -20,8 +20,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { setTokens } from "@/store/auth/authSlice";
-import { apiGetRecentMessages, apiLogin } from "@/utils/axios.utils";
+import { setTokens } from "@/store/slides/authSlice";
+import { apiGetRecentMessages, apiLogin } from "@/api/auth.api";
 
 const LoginForm = () => {
   const formSchema = z.object({

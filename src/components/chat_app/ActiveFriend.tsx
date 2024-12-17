@@ -11,7 +11,7 @@ import {
   CarouselItem,
 } from "@/components/ui-shadcn/carousel";
 
-import { currentConversation } from "@/store/conversation/conversationSlice.ts";
+import { currentConversation } from "@/store/slides/conversationSlice";
 
 const ActiveFriend = () => {
   const dispatch = useDispatch();

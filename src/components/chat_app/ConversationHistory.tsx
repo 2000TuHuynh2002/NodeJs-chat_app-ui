@@ -7,7 +7,7 @@ import {
   AvatarImage,
 } from "@/components/ui-shadcn/avatar";
 
-import { currentConversation } from "@/store/conversation/conversationSlice.ts";
+import { currentConversation } from "@/store/slides/conversationSlice";
 
 const db = await openDB("chat_app", 1);
 const tx = db.transaction("messages", "readonly");

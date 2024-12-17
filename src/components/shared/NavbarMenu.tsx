@@ -3,7 +3,7 @@ import { useLocation } from "react-router";
 import { BsBook } from "react-icons/bs";
 import { FaRegMessage } from "react-icons/fa6";
 import { Link } from "react-router";
-import { cn } from "@/lib/shadcn/shadcn";
+import { cn } from "@/lib/shadcn";
 
 const NavbarMenu: React.FC = () => {
   const pathDict = {

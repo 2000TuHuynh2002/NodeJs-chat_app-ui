@@ -18,8 +18,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { apiFindUserByUsername } from "@/utils/axios.utils";
-import { apiRefresh,apiCreateConversation } from "@/utils/axios.utils";
+import { apiFindUserByUsername } from "@/api/auth.api";
+import { apiRefresh,apiCreateConversation } from "@/api/auth.api";
 
 const SearchBar = () => {
   const formSchema = z.object({
