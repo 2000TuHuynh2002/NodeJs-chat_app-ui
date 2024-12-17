@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, Outlet } from "react-router";
 import { useSelector } from "react-redux";
+import { openDB } from "idb";
 
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
@@ -23,9 +24,20 @@ import { isCookieExist } from "@/utils/cookie.utils";
 
 import "@/App.css";
 
+await openDB("chat_app", 1, {
+  upgrade(db) {
+    if (!db.objectStoreNames.contains("messages")) {
+      db.createObjectStore("messages", {
+        keyPath: "id",
+        autoIncrement: true,
+      });
+    }
+  },
+});
+
 if (isCookieExist("isLoggedIn") && !sessionStorage.getItem("accessToken")) {
   try {
-    apiRefresh();
+    await apiRefresh();
   } catch (error) {
     console.error("Failed to get access token:", error);
   }

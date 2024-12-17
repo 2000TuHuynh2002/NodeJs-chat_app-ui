@@ -1,6 +1,12 @@
+"use client";
+
 import { useContext } from "react";
+import { toast } from "sonner";
+
+import { useSelector } from "react-redux";
 
 import { Input } from "@/components/ui-shadcn/input";
+import { Toaster } from "@/components/ui-shadcn/sonner";
 import { IoIosSend } from "react-icons/io";
 import { FaPaperclip } from "react-icons/fa6";
 
@@ -9,14 +15,20 @@ import { apiSendMessage } from "@/api/message.api";
 
 const Conversations = () => {
   const socket = useContext(SocketContext);
+  const currentRoom = useSelector((state: any) => state.conversation.id)
 
   const sendMessage = async (message: string) => {
-    socket.emit("sendMessage", "Hello from the client");
-    apiSendMessage(message);
+    socket.emit("sendMessage", currentRoom ,"Hello from the client");
+    await apiSendMessage(message);
   };
+
+  socket.on("getMessage", (message: any) => {
+    toast.success(message);
+  });
 
   return (
     <>
+      <Toaster />
       {/* Message input */}
       <Input
         placeholder="Type a message"
