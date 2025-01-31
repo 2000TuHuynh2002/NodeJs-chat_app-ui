@@ -23,19 +23,21 @@ const ActiveFriend = ({ allRooms, setRoom }: ActiveFriendProps) => {
       className="w-[90%] mx-auto mt-[1rem]"
     >
       <CarouselContent className={`-ml-3 h-[4rem]`}>
-        {allRooms.map((room: any, index: number) => (
-          <CarouselItem key={index} className={`pl-3 my-auto basis-1/6`}>
-            <div className="pl-1">
-              <Avatar
-                className="w-[3.5rem] h-[3.5rem] ring-[3px] cursor-pointer"
-                onClick={() => setRoom(room)}
-              >
-                <AvatarImage src="" />
-                <AvatarFallback>{index}</AvatarFallback>
-              </Avatar>
-            </div>
-          </CarouselItem>
-        ))}
+        {allRooms.map((room: any, index: number) =>
+          room.messages.length === 0 ? null : (
+            <CarouselItem key={index} className={`pl-3 my-auto basis-1/6`}>
+              <div className="pl-1">
+                <Avatar
+                  className="w-[3.5rem] h-[3.5rem] ring-[3px] cursor-pointer"
+                  onClick={() => setRoom(room)}
+                >
+                  <AvatarImage src="" />
+                  <AvatarFallback>{index}</AvatarFallback>
+                </Avatar>
+              </div>
+            </CarouselItem>
+          )
+        )}
       </CarouselContent>
     </Carousel>
   );

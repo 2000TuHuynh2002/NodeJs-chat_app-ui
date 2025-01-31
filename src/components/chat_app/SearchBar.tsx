@@ -21,7 +21,6 @@ import { apiCreateRoom } from "@/api/room.api";
 import { apiFindByUsername } from "@/api/user.api";
 import { ADD_ROOM } from "@/store/slides/roomSlice";
 import store from "@/store/store";
-import { all } from "axios";
 
 interface SearchBarProps {
   allRooms: Array<object>;
@@ -80,6 +79,7 @@ const SearchBar = ({ allRooms, setRoom }: SearchBarProps) => {
       };
 
       store.dispatch(ADD_ROOM(room));
+      setRoom(room);
     }
     toast.success("User found!");
 
