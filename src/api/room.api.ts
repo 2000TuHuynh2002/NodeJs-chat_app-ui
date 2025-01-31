@@ -1,33 +1,27 @@
-import axios from "axios";
+import axiosRequest from "@/lib/axios";
 
 import store from "@/store/store";
 
-const API_URL = process.env.API_URL || "localhost:3000";
-
-const apiCreateRoom = async (username: string) => {
-  const token = store.getState().auth.accessToken;
-
+const apiGetRecent = async () => {
   const data = {
-    username01: username,
-    username02: "admin",
+    userId: store.getState().auth.user.id,
   };
 
-  return axios({
-    method: "POST",
-    url: `http://${API_URL}/api/room/create`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.token}`,
-    },
-    withCredentials: true,
-    data: data,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
-}
+  const result = axiosRequest("GET", "api/message/recent", data);
+  return result;
+};
 
-export { apiCreateRoom };
+const apiCreateRoom = async (username: string) => {
+  const data = {
+    username01: username,
+    username02: store.getState().auth.user.username,
+  };
+
+  return await axiosRequest(
+    "POST",
+    "api/room/create",
+    data
+  );
+};
+
+export { apiGetRecent, apiCreateRoom };

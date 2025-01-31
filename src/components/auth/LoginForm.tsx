@@ -2,7 +2,6 @@
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { openDB } from "idb";
 
 import { Button } from "@/components/ui-shadcn/button";
 import {
@@ -20,10 +19,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { setTokens } from "@/store/slides/authSlice";
-
 import { apiLogin } from "@/api/auth.api";
-import { apiGetRecent } from "@/api/message.api";
+import { SET_TOKENS } from "@/store/slides/authSlice";
 
 const LoginForm = () => {
   const formSchema = z.object({
@@ -53,43 +50,7 @@ const LoginForm = () => {
     }
 
     const { accessToken, user } = response;
-    dispatch(setTokens({ accessToken, user }));
-
-    const [messageStatus, messageResponse] = await apiGetRecent();
-    if (messageStatus !== 200) {
-      form.setError("username", {
-        type: "manual",
-        message: response.error,
-      });
-      return;
-    }
-
-    const db = await openDB("chat_app", 1, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains("messages")) {
-          db.createObjectStore("messages", {
-            keyPath: "id",
-            autoIncrement: true,
-          });
-        }
-      },
-    });
-
-    console.log("messageResponse", messageResponse);
-
-    const tx = db.transaction("messages", "readwrite");
-    const store = tx.objectStore("messages");
-
-    if (Array.isArray(messageResponse.recentMessages)) {
-      for (const message of messageResponse.recentMessages) {
-        store.add(message);
-      }
-    } else {
-      console.error("messageResponse.recentMessages is not an array");
-    }
-
-    await tx.done;
-
+    dispatch(SET_TOKENS({ accessToken, user }));
     navigate("/");
   };
 

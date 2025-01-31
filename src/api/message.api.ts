@@ -1,58 +1,25 @@
-import axios from 'axios';
-
+import axiosRequest from "@/lib/axios";
 import store from "@/store/store";
 
-const API_URL = process.env.API_URL || 'localhost:3000';
-
-const apiGetRecent = async () => {
-  const token = store.getState().auth.accessToken;
-
-  return axios({
-    method: "GET",
-    url: `http://${API_URL}/api/message/recent/`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.token}`,
-    },
-    withCredentials: true,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
-};
-
-const apiSendMessage = async (message: string) => {
-  const token = store.getState().auth.accessToken;
+const apiSendMessage = async (
+  roomId: string,
+  friendId: string,
+  message: string
+) => {
   const currentUser = store.getState().auth.user.id;
-  const currentFriend = store.getState().conversation.friend_id;
-  const currentRoom = store.getState().conversation.id;
 
   const data = {
     senderId: currentUser,
-    recipientId: currentFriend,
+    recipientId: friendId,
     content: message,
-    roomId: currentRoom,
+    roomId: roomId,
   };
 
-  return axios({
-    method: "POST",
-    url: `http://${API_URL}/api/message/send-message/`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token.token}`,
-    },
-    withCredentials: true,
-    data: data,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
-}
+  return axiosRequest("POST", "api/message/send-message", data);
+};
 
-export { apiGetRecent, apiSendMessage };
+const apiGetMessagesByRoomId = async (roomId: string) => {
+  return axiosRequest("GET", `api/message/get-messages-by-room-id/${roomId}`);
+};
+
+export { apiSendMessage, apiGetMessagesByRoomId };

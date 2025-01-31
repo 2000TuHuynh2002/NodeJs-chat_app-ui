@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/store/slides/authSlice";
-import conversationReducer from "@/store/slides/conversationSlice";
-import messageReducer from "@/store/slides/messageSlice";
+import roomReducer from "@/store/slides/roomSlice";
 
 const store =  configureStore({
   reducer: {
     auth: authReducer,
-    conversation: conversationReducer,
-    message: messageReducer,
+    room: roomReducer,
   },
 });
 

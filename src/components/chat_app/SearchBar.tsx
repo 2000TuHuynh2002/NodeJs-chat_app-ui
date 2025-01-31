@@ -1,5 +1,8 @@
 "use client";
 
+import { set, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import {
@@ -14,15 +17,18 @@ import { Toaster } from "@/components/ui-shadcn/sonner";
 
 import { FaSearch } from "react-icons/fa";
 
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { apiRefresh } from "@/api/auth.api";
 import { apiCreateRoom } from "@/api/room.api";
 import { apiFindByUsername } from "@/api/user.api";
+import { ADD_ROOM } from "@/store/slides/roomSlice";
+import store from "@/store/store";
+import { all } from "axios";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  allRooms: Array<object>;
+  setRoom: any;
+}
+
+const SearchBar = ({ allRooms, setRoom }: SearchBarProps) => {
   const formSchema = z.object({
     findUser: z.string().max(50),
   });
@@ -39,13 +45,12 @@ const SearchBar = () => {
       return;
     }
 
-    const [status, response] = await apiFindByUsername(data.findUser);
-    if (status === 401 && response.error === "Access token expired") {
-      await apiRefresh();
-      await onSubmitHandler(data);
+    if (data.findUser === store.getState().auth.user.username) {
+      toast.error("Why you find yourself?");
       return;
     }
 
+    const [status, response] = await apiFindByUsername(data.findUser);
     if (status === 404) {
       toast.error("User not found!");
       return;
@@ -53,10 +58,32 @@ const SearchBar = () => {
 
     if (status === 200) {
       form.reset();
-      await apiCreateRoom(data.findUser);
-      toast.success("User found!");
-      return;
+      const [status, response] = await apiCreateRoom(data.findUser);
+
+      if (response.room.roomId) {
+        const existingRoom = allRooms.find(
+          (room: any) => room.id === response.room.roomId
+        );
+        if (existingRoom) {
+          setRoom(existingRoom);
+          return;
+        }
+      }
+
+      const room = {
+        id: response.room.roomId,
+        membersCount: 2,
+        memberID: response.room.memberId,
+        friend: response.room.friend,
+        updatedAt: response.updatedAt,
+        messages: [],
+      };
+
+      store.dispatch(ADD_ROOM(room));
     }
+    toast.success("User found!");
+
+    return;
   };
 
   return (

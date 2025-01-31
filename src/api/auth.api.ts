@@ -1,67 +1,11 @@
-import axios from "axios";
-
-import { setTokens, logout } from "@/store/slides/authSlice";
-import store from "@/store/store";
-
-const API_URL = process.env.API_URL || "localhost:3000";
+import axiosRequest from "@/lib/axios";
 
 const apiLogin = async (data: any) => {
-  return axios({
-    method: "POST",
-    url: `http://${API_URL}/api/auth/login`,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-    data: data,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
+  return axiosRequest("POST", "api/auth/login", data);
 };
 
 const apiLogout = async () => {
-  return axios({
-    method: "POST",
-    url: `http://${API_URL}/api/auth/logout`,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  })
-    .then((response) => {
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      return [error.response.status, error.response.data];
-    });
+  return axiosRequest("POST", "api/auth/logout");
 };
 
-const apiRefresh = async () => {
-  return axios({
-    method: "POST",
-    url: `http://${API_URL}/api/auth/refreshToken`,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  })
-    .then((response) => {
-      const { accessToken, user } = response.data;
-      store.dispatch(setTokens({ accessToken, user }));
-      return [response.status, response.data];
-    })
-    .catch((error) => {
-      store.dispatch(logout());
-      return [error.response.status, error.response.data];
-    });
-};
-
-export {
-  apiLogin,
-  apiLogout,
-  apiRefresh,
-};
+export { apiLogin, apiLogout };

@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate, Outlet } from "react-router";
 import { useSelector } from "react-redux";
-import { openDB } from "idb";
 
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
@@ -19,29 +18,7 @@ import Register from "@/pages/auth/Register";
 
 import NotFound from "@/pages/error/404";
 
-import { apiRefresh } from "@/api/auth.api";
-import { isCookieExist } from "@/utils/cookie.utils";
-
 import "@/App.css";
-
-await openDB("chat_app", 1, {
-  upgrade(db) {
-    if (!db.objectStoreNames.contains("messages")) {
-      db.createObjectStore("messages", {
-        keyPath: "id",
-        autoIncrement: true,
-      });
-    }
-  },
-});
-
-if (isCookieExist("isLoggedIn") && !sessionStorage.getItem("accessToken")) {
-  try {
-    await apiRefresh();
-  } catch (error) {
-    console.error("Failed to get access token:", error);
-  }
-}
 
 const ProtectedRoute = () => {
   const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);
