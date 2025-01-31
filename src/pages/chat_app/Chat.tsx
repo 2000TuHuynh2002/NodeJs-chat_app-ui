@@ -4,16 +4,19 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ActiveFriend from "@/components/chat_app/ActiveFriend";
-import ConversationsHistory from "@/components/chat_app/RoomHistory";
-import Conversations from "@/components/chat_app/Room";
+import RoomsHistory from "@/components/chat_app/RoomHistory";
+import Rooms from "@/components/chat_app/Room";
 import SearchBar from "@/components/chat_app/SearchBar";
 import ProfilePanel from "@/components/chat_app/ProfilePanel";
 
-import { apiGetMessagesByRoomId } from "@/api/message.api";
 import { apiSendMessage } from "@/api/message.api";
 import { apiGetRecent } from "@/api/room.api";
 import { socket } from "@/contexts/socket.context";
-import { SET_ROOMS, SET_MESSAGES_TO_ROOM } from "@/store/slides/roomSlice";
+import {
+  SET_ROOMS,
+  SET_MESSAGES_TO_ROOM,
+  ADD_MESSAGE_TO_ROOM,
+} from "@/store/slides/roomSlice";
 
 interface Room {
   id: string;
@@ -39,40 +42,60 @@ interface Room {
 const Chat = () => {
   const curr_user = useSelector((state: any) => state.auth.user);
   const allRooms = useSelector((state: any) => state.room.rooms);
-  const roomsMessages = useSelector((state: any) => state.room.roomsMessages);
 
   const dispatch = useDispatch();
 
-  const [messages, setMessages] = useState([] as Array<object>);
+  const [selectedRoom, setSelectedRoom] = useState(null as Room | null);
   const [messageSend, setMessageSend] = useState("");
-  const [room, setRoom] = useState(null as Room | null);
+
+  const curr_messages = selectedRoom
+    ? allRooms.find((r: Room) => r.id === selectedRoom.id)?.messages
+    : [];
+
+  // Request recent conversations every time the page is loaded
+  useEffect(() => {
+    const fetchConversations = async () => {
+      const [status, response] = await apiGetRecent();
+      if (status !== 200 && status !== 304) return;
+      dispatch(SET_ROOMS(response.data));
+      dispatch(
+        SET_MESSAGES_TO_ROOM({
+          roomId: response.data[0].id,
+          messages: response.data[0].messages,
+        })
+      );
+    };
+    fetchConversations();
+  }, []);
 
   const handleSendMessage = async (message: string) => {
-    if (room && message) {
+    if (selectedRoom && message) {
       const newMessage = {
         senderId: curr_user.id,
-        recipientId: room.friend.id,
+        recipientId: selectedRoom.friend.id,
         content: message,
+        status: "SENT",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
       setMessageSend("");
-      setMessages([newMessage, ...messages]);
-      dispatch(
-        SET_MESSAGES_TO_ROOM({
-          roomId: room.id,
-          messages: [newMessage, ...messages],
-        })
-      );
 
-      const updatedRooms = allRooms.filter((r: Room) => r.id !== room.id);
-      updatedRooms.unshift({ ...room, messages: [newMessage] });
+      const updatedRooms = allRooms.filter(
+        (r: Room) => r.id !== selectedRoom.id
+      );
+      updatedRooms.unshift(selectedRoom);
 
       dispatch(SET_ROOMS(updatedRooms));
 
-      setRoom({ ...room, messages: [newMessage] });
-      socket.emit("sendMessage", room.friend.id, newMessage);
-      await apiSendMessage(room.id, room.friend.id, message);
+      dispatch(
+        ADD_MESSAGE_TO_ROOM({
+          roomId: selectedRoom.id,
+          message: newMessage,
+        })
+      );
+
+      socket.emit("sendMessage", selectedRoom.friend.id, newMessage);
+      await apiSendMessage(selectedRoom.id, selectedRoom.friend.id, message);
     }
   };
 
@@ -85,57 +108,26 @@ const Chat = () => {
     };
   }, []);
 
-  // Request recent conversations every time the page is loaded
-  useEffect(() => {
-    const fetchConversations = async () => {
-      const [status, response] = await apiGetRecent();
-      if (status !== 200 && status !== 304) return;
-      dispatch(SET_ROOMS(response.data));
-    };
-    fetchConversations();
-  }, []);
-
-  // Fetch messages when loading a conversation
-  useEffect(() => {
-    if (!room) {
-      return;
-    }
-
-    const fetchMessages = async () => {
-      if (!roomsMessages[room.id]) {
-        const [status, response] = await apiGetMessagesByRoomId(room.id);
-        if (status !== 200 && status !== 304) return;
-        dispatch(
-          SET_MESSAGES_TO_ROOM({ roomId: room.id, messages: response.data })
-        );
-        setMessages(response.data);
-      }
-    };
-    fetchMessages();
-    setMessages(roomsMessages[room.id]);
-    setMessageSend("");
-  }, [room]);
-
   return (
     <>
       <div className="grid xl:grid-cols-12 grid-cols-1">
         <div className="xl:col-span-3 border-r-2 border-black dark:border-slate-600 col-span-1 h-[calc(100vh-6.6rem)]">
-          <SearchBar allRooms={allRooms} setRoom={setRoom} />
-          <ActiveFriend allRooms={allRooms} setRoom={setRoom} />
-          <ConversationsHistory allRooms={allRooms} setRoom={setRoom} />
+          <SearchBar allRooms={allRooms} setRoom={setSelectedRoom} />
+          <ActiveFriend allRooms={allRooms} setRoom={setSelectedRoom} />
+          <RoomsHistory allRooms={allRooms} setRoom={setSelectedRoom} />
         </div>
-        {room ? (
+        {selectedRoom ? (
           <>
             <div className="xl:col-span-6 border-r-2 border-black dark:border-slate-600 xl:block hidden relative">
-              <Conversations
-                messages={messages}
+              <Rooms
+                messages={curr_messages}
                 messageSend={messageSend}
                 setMessageSend={setMessageSend}
                 handleSendMessage={handleSendMessage}
               />
             </div>
             <div className="xl:col-span-3 xl:block hidden relative">
-              <ProfilePanel friendInfo={room.friend} />
+              <ProfilePanel friendInfo={selectedRoom.friend} />
             </div>
           </>
         ) : null}

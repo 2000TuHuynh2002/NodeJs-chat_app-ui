@@ -1,17 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface roomsMessages {
-  [key: string]: Array<{
+interface roomsMessagesType {
+  id: string;
+  memberCount: number;
+  memberID: Array<string>;
+  friend: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    role: Array<string>;
+  };
+  updatedAt: string;
+  cretedAt: string;
+  messages: Array<{
     senderId: string;
+    recipientId: string;
     content: string;
+    status: string;
     createdAt: string;
     updatedAt: string;
   }>;
 }
 
 const initialState = {
-  rooms: [] as Array<object>,
-  roomsMessages: {} as roomsMessages,
+  rooms: [] as Array<roomsMessagesType>,
 };
 
 const roomSlice = createSlice({
@@ -25,22 +39,30 @@ const roomSlice = createSlice({
       state.rooms = [];
     },
     ADD_ROOM: (state, action) => {
-      state.rooms.unshift(action.payload);
+      state.rooms = [action.payload, ...state.rooms];
     },
     SET_MESSAGES_TO_ROOM: (state, action) => {
       const { roomId, messages } = action.payload;
-      state.roomsMessages[roomId] = messages;
-    },
-    CLEAR_MESSAGES: (state) => {
-      state.roomsMessages = {};
+      const room = state.rooms.find((room) => room.id === roomId);
+      if (room) {
+        room.messages = messages;
+      }
     },
     ADD_MESSAGE_TO_ROOM: (state, action) => {
       const { roomId, message } = action.payload;
-      state.roomsMessages[roomId].push(message);
+      const room = state.rooms.find((room) => room.id === roomId);
+      if (room) {
+        room.messages = [message, ...room.messages];
+      }
     },
   },
 });
 
-export const { SET_ROOMS, CLEAR_ROOMS, ADD_ROOM, SET_MESSAGES_TO_ROOM, CLEAR_MESSAGES, ADD_MESSAGE_TO_ROOM } =
-  roomSlice.actions;
+export const {
+  SET_ROOMS,
+  CLEAR_ROOMS,
+  ADD_ROOM,
+  SET_MESSAGES_TO_ROOM,
+  ADD_MESSAGE_TO_ROOM,
+} = roomSlice.actions;
 export default roomSlice.reducer;

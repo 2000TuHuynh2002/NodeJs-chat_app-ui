@@ -6,34 +6,39 @@ import { Input } from "@/components/ui-shadcn/input";
 import { IoIosSend } from "react-icons/io";
 import { FaPaperclip } from "react-icons/fa6";
 
-interface ConversationsProps {
+interface RoomsProps {
   messages: Array<object>;
   messageSend: string;
   setMessageSend: any;
   handleSendMessage: any;
 }
 
-const Conversations = ({ messages, messageSend, setMessageSend, handleSendMessage }: ConversationsProps) => {
+const Rooms = ({
+  messages,
+  messageSend,
+  setMessageSend,
+  handleSendMessage,
+}: RoomsProps) => {
   const curr_user = useSelector((state: any) => state.auth.user);
 
   return (
     <>
       <div className="flex flex-col-reverse h-[calc(100vh-10rem)] overflow-y-auto">
-        {messages?.map((message: any, index: number) => (
-          message.senderId === curr_user.id ? (
+        {messages?.map((message: any, index: number) =>
+          message?.senderId === curr_user.id ? (
             <div key={index} className="flex justify-end">
               <div className="bg-blue-300 dark:bg-blue-700 text-slate-800 dark:text-slate-200 p-2 m-2 rounded-lg">
-                {message.content}
+                {message?.content}
               </div>
             </div>
           ) : (
             <div key={index} className="flex justify-start">
               <div className="bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 p-2 m-2 rounded-lg">
-                {message.content}
+                {message?.content}
               </div>
             </div>
           )
-        ))}
+        )}
       </div>
       {/* Message input */}
       <Input
@@ -63,4 +68,4 @@ const Conversations = ({ messages, messageSend, setMessageSend, handleSendMessag
   );
 };
 
-export default Conversations;
+export default Rooms;

@@ -9,12 +9,9 @@ interface RoomHistoryProps {
   setRoom: any;
 }
 
-const RoomsHistory = ({
-  allRooms,
-  setRoom,
-}: RoomHistoryProps) => {
+const RoomsHistory = ({ allRooms, setRoom }: RoomHistoryProps) => {
   const lastMessage = (room: any) => {
-    return room.messages[room.messages.length - 1];
+    return room.messages[0];
   };
 
   return (
@@ -22,7 +19,9 @@ const RoomsHistory = ({
       {allRooms.map((room: any, index: number) => (
         <div
           className="flex hover:bg-[#9dc0fa] dark:hover:bg-[#244986] px-[7px] py-[10px] cursor-pointer border-b"
-          onClick={() => {setRoom(room)}}
+          onClick={() => {
+            setRoom(room);
+          }}
           key={index}
         >
           <div className="">
@@ -37,12 +36,15 @@ const RoomsHistory = ({
                 {`${room.friend.firstName} ${room.friend.lastName}`}
               </div>
               <div className="text-sm my-auto text-gray-500">
-                {lastMessage(room)?.createdAt 
-                  ? new Date(lastMessage(room).createdAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })
+                {lastMessage(room)?.createdAt
+                  ? new Date(lastMessage(room).createdAt).toLocaleTimeString(
+                      [],
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      }
+                    )
                   : "Not have any message"}
               </div>
             </div>
