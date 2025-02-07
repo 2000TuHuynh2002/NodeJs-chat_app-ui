@@ -13,9 +13,11 @@ import { apiSendMessage } from "@/api/message.api";
 import { apiGetRecent } from "@/api/room.api";
 import { socket } from "@/contexts/socket.context";
 import {
+  ADD_ROOM,
   SET_ROOMS,
   SET_MESSAGES_TO_ROOM,
   ADD_MESSAGE_TO_ROOM,
+  REORDER_ROOMS,
 } from "@/store/slides/roomSlice";
 
 interface Room {
@@ -60,13 +62,17 @@ const Chat = () => {
       dispatch(SET_ROOMS(response.data));
       dispatch(
         SET_MESSAGES_TO_ROOM({
-          roomId: response.data[0].id,
-          messages: response.data[0].messages,
+          roomId: response.data[0]?.id,
+          messages: response.data[0]?.messages,
         })
       );
     };
     fetchConversations();
   }, []);
+
+  useEffect(() => {
+    dispatch(REORDER_ROOMS(allRooms));
+  }, [allRooms]);
 
   const handleSendMessage = async (message: string) => {
     if (selectedRoom && message) {
@@ -76,16 +82,8 @@ const Chat = () => {
         content: message,
         status: "SENT",
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
       };
       setMessageSend("");
-
-      const updatedRooms = allRooms.filter(
-        (r: Room) => r.id !== selectedRoom.id
-      );
-      updatedRooms.unshift(selectedRoom);
-
-      dispatch(SET_ROOMS(updatedRooms));
 
       dispatch(
         ADD_MESSAGE_TO_ROOM({
@@ -94,19 +92,46 @@ const Chat = () => {
         })
       );
 
-      socket.emit("sendMessage", selectedRoom.friend.id, newMessage);
+      socket.emit("sendMessage", newMessage);
       await apiSendMessage(selectedRoom.id, selectedRoom.friend.id, message);
     }
   };
 
   useEffect(() => {
-    socket.on("receiveMessage", (message: any) => {
-      console.log("Received message", message);
-    });
+    const handleReceiveMessage = (message: any) => {
+      const room = allRooms.find((room: Room) => room.id === message.roomId);
+      if (message.roomId) {
+        if (room) {
+          dispatch(
+            ADD_MESSAGE_TO_ROOM({
+              roomId: message.roomId,
+              message: message,
+            })
+          );
+        } else {
+          const newRoom = {
+            id: message.roomId,
+            membersCount: 2,
+            memberID: message.memberID,
+            friend: {
+              id: message.sender.id,
+              email: message.sender.email,
+              firstName: message.sender.firstName,
+              lastName: message.sender.lastName,
+              username: message.sender.username,
+            },
+            updatedAt: message.updatedAt,
+            messages: [message],
+          };
+          dispatch(ADD_ROOM(newRoom));
+        }
+      }
+    };
+    socket.on("receiveMessage", handleReceiveMessage);
     return () => {
       socket.off("receiveMessage");
     };
-  }, []);
+  }, [allRooms]);
 
   return (
     <>

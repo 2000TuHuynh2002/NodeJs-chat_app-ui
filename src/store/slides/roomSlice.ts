@@ -52,8 +52,16 @@ const roomSlice = createSlice({
       const { roomId, message } = action.payload;
       const room = state.rooms.find((room) => room.id === roomId);
       if (room) {
+        room.updatedAt = message.createdAt;
         room.messages = [message, ...room.messages];
       }
+    },
+    REORDER_ROOMS: (state, action) => {
+      const newOrder = state.rooms.sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+      state.rooms = newOrder;
     },
   },
 });
@@ -64,5 +72,6 @@ export const {
   ADD_ROOM,
   SET_MESSAGES_TO_ROOM,
   ADD_MESSAGE_TO_ROOM,
+  REORDER_ROOMS,
 } = roomSlice.actions;
 export default roomSlice.reducer;
