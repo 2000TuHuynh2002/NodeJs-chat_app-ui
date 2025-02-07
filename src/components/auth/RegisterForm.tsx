@@ -39,6 +39,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
     navigate("/auth/login");
   };
 

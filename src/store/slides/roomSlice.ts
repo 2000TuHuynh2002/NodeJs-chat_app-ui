@@ -56,7 +56,7 @@ const roomSlice = createSlice({
         room.messages = [message, ...room.messages];
       }
     },
-    REORDER_ROOMS: (state, action) => {
+    REORDER_ROOMS: (state, _) => {
       const newOrder = state.rooms.sort(
         (a, b) =>
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()

@@ -49,7 +49,7 @@ const SearchBar = ({ allRooms, setRoom }: SearchBarProps) => {
       return;
     }
 
-    const [status, response] = await apiFindByUsername(data.findUser);
+    const [status, _] = await apiFindByUsername(data.findUser);
     if (status === 404) {
       toast.error("User not found!");
       return;
@@ -57,7 +57,7 @@ const SearchBar = ({ allRooms, setRoom }: SearchBarProps) => {
 
     if (status === 200) {
       form.reset();
-      const [status, response] = await apiCreateRoom(data.findUser);
+      const [_, response] = await apiCreateRoom(data.findUser);
 
       if (response.room.roomId) {
         const existingRoom = allRooms.find(
