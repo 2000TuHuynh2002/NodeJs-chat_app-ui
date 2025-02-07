@@ -36,7 +36,7 @@ const axiosRequest = async (method: string, url: string, data?: object) => {
   }
 
   if (response.error === "Access token expired") {
-    const [refreshStatus, refreshData] = await axios({
+    const [refreshStatus, _] = await axios({
       method: "POST",
       url: `http://${API_URL}/api/auth/refreshToken`,
       headers: {
