@@ -48,7 +48,6 @@ const Chat = () => {
   const dispatch = useDispatch();
 
   const [selectedRoom, setSelectedRoom] = useState(null as Room | null);
-  const [messageSend, setMessageSend] = useState("");
 
   const curr_messages = selectedRoom
     ? allRooms.find((r: Room) => r.id === selectedRoom.id)?.messages
@@ -83,7 +82,6 @@ const Chat = () => {
         status: "SENT",
         createdAt: new Date().toISOString(),
       };
-      setMessageSend("");
 
       dispatch(
         ADD_MESSAGE_TO_ROOM({
@@ -146,8 +144,6 @@ const Chat = () => {
             <div className="xl:col-span-6 border-r-2 border-black dark:border-slate-600 xl:block hidden relative">
               <Rooms
                 messages={curr_messages}
-                messageSend={messageSend}
-                setMessageSend={setMessageSend}
                 handleSendMessage={handleSendMessage}
               />
             </div>
