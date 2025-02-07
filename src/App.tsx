@@ -1,23 +1,24 @@
 import { Routes, Route, Navigate, Outlet } from "react-router";
 import { useSelector } from "react-redux";
+
 import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
-import MainLayout from "./layouts/MainLayout";
-import Container from "./components/shared/Container";
-import About from "./pages/main/About";
-import Home from "./pages/main/Home";
-import Profile from "./pages/main/Profile";
-import Settings from "./pages/main/Settings";
-import Dashboard from "./pages/main/Dashboard";
-import Messages from "./pages/chat_app/Chat";
+import MainLayout from "@/layouts/MainLayout";
+import Container from "@/components/shared/Container";
+import About from "@/pages/main/About";
+import Home from "@/pages/main/Home";
+import Profile from "@/pages/main/Profile";
+import Settings from "@/pages/main/Settings";
+import Dashboard from "@/pages/main/Dashboard";
+import Messages from "@/pages/chat_app/Chat";
 
-import AuthLayout from "./layouts/AuthLayout";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
+import AuthLayout from "@/layouts/AuthLayout";
+import Login from "@/pages/auth/Login";
+import Register from "@/pages/auth/Register";
 
-import NotFound from "./pages/error/404";
+import NotFound from "@/pages/error/404";
 
-import "./App.css";
+import "@/App.css";
 
 const ProtectedRoute = () => {
   const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);

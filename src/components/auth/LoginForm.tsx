@@ -19,8 +19,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { setTokens } from "@/store/auth/authSlice";
-import { apiLogin } from "@/utils/axios.utils";
+import { apiLogin } from "@/api/auth.api";
+import { SET_TOKENS } from "@/store/slides/authSlice";
 
 const LoginForm = () => {
   const formSchema = z.object({
@@ -41,16 +41,17 @@ const LoginForm = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const [status, response] = await apiLogin(data);
-    if (status === 200) {
-      const { accessToken, user } = response;
-      dispatch(setTokens({ accessToken, user }));
-      navigate("/");
-    } else {
+    if (status !== 200) {
       form.setError("username", {
         type: "manual",
         message: response.error,
       });
+      return;
     }
+
+    const { accessToken, user } = response;
+    dispatch(SET_TOKENS({ accessToken, user }));
+    navigate("/");
   };
 
   return (
