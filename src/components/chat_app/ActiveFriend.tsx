@@ -31,7 +31,7 @@ const ActiveFriend = ({ allRooms, setRoom }: ActiveFriendProps) => {
                   className="w-[3.5rem] h-[3.5rem] ring-[3px] cursor-pointer"
                   onClick={() => setRoom(room)}
                 >
-                  <AvatarImage src="" />
+                  <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>{index}</AvatarFallback>
                 </Avatar>
               </div>

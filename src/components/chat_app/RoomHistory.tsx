@@ -27,7 +27,7 @@ const RoomsHistory = ({ allRooms, setRoom }: RoomHistoryProps) => {
           >
             <div className="">
               <Avatar className="w-[3.5rem] h-[3.5rem]">
-                <AvatarImage src="" />
+                <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>{index}</AvatarFallback>
               </Avatar>
             </div>
