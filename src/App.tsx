@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate, Outlet } from "react-router";
+import { useSelector } from "react-redux";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { ThemeProvider } from "@/components/ui-shadcn/theme-provider";
 
+import MainLayout from "@/layouts/MainLayout";
+import Container from "@/components/shared/Container";
+import About from "@/pages/main/About";
+import Home from "@/pages/main/Home";
+import Profile from "@/pages/main/Profile";
+import Settings from "@/pages/main/Settings";
+import Dashboard from "@/pages/main/Dashboard";
+import Messages from "@/pages/chat_app/Chat";
+
+import AuthLayout from "@/layouts/AuthLayout";
+import Login from "@/pages/auth/Login";
+import Register from "@/pages/auth/Register";
+
+import NotFound from "@/pages/error/404";
+
+import "@/App.css";
+
+const ProtectedRoute = () => {
+  const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);
+  return isLoggedIn ? <Outlet /> : <Navigate to="/auth/login" />;
+};
+
+const AuthRoute = () => {
+  const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);
+  return isLoggedIn ? <Navigate to="/" /> : <Outlet />;
+};
+
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <Routes>
+        {/* Main-application pages */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<MainLayout />}>
+            <Route element={<Container />}>
+              <Route index element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
 
-export default App
+            <Route path="chat">
+              <Route path="messages" element={<Messages />} />
+            </Route>
+          </Route>
+        </Route>
+
+        {/* Authentication pages */}
+        <Route element={<AuthRoute />}>
+          <Route path="auth" element={<AuthLayout />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+        </Route>
+
+        {/* Error pages */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </ThemeProvider>
+  );
+};
+
+export default App;
